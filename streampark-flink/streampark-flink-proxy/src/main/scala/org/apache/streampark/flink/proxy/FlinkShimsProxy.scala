@@ -37,6 +37,8 @@ object FlinkShimsProxy extends Logger {
     "streampark-flink-shims_flink-(1.12|1.13|1.14|1.15|1.16)_(2.11|2.12)-(.*).jar",
     Pattern.CASE_INSENSITIVE | Pattern.DOTALL)
 
+  private[this] val FLINK_SHIMS_V2: String = "streampark-flink-shims-v2"
+
   private[this] val SHIMS_CLASS_LOADER_CACHE = MutableMap[String, ClassLoader]()
 
   private[this] val VERIFY_SQL_CLASS_LOADER_CACHE = MutableMap[String, ClassLoader]()
@@ -122,6 +124,8 @@ object FlinkShimsProxy extends Logger {
           if (majorVersion == shimsMatcher.group(1) && scalaVersion == shimsMatcher.group(2)) {
             addShimUrl(jar)
           }
+        } else if (jar.getName.startsWith(FLINK_SHIMS_V2)) {
+          addShimUrl(jar)
         } else {
           if (INCLUDE_PATTERN.matcher(jar.getName).matches()) {
             addShimUrl(jar)

@@ -43,9 +43,9 @@ import org.apache.streampark.common.conf.ConfigConst._
 import org.apache.streampark.common.conf.Workspace
 import org.apache.streampark.common.enums.{ApplicationType, DevelopmentMode, ExecutionMode}
 import org.apache.streampark.common.util.{DeflaterUtils, Logger}
-import org.apache.streampark.flink.core.FlinkClusterClient
 import org.apache.streampark.flink.core.conf.FlinkRunOption
 import org.apache.streampark.flink.client.bean._
+import org.apache.streampark.flink.shims.FlinkShimLoader
 
 import scala.annotation.tailrec
 
@@ -477,7 +477,7 @@ trait FlinkClientTrait extends Logger {
 
     val clientTimeout = getOptionFromDefaultFlinkConfig(cancelRequest.flinkVersion.flinkHome, ClientOptions.CLIENT_TIMEOUT)
 
-    val clientWrapper = new FlinkClusterClient(client)
+    val clientWrapper = FlinkShimLoader.loadFlinkClient(client)
 
     (Try(cancelRequest.withSavepoint).getOrElse(false), Try(cancelRequest.withDrain).getOrElse(false)) match {
       case (false, false) =>
@@ -517,7 +517,7 @@ trait FlinkClientTrait extends Logger {
 
     val clientTimeout = getOptionFromDefaultFlinkConfig(savepointRequest.flinkVersion.flinkHome, ClientOptions.CLIENT_TIMEOUT)
 
-    val clientWrapper = new FlinkClusterClient(client)
+    val clientWrapper = FlinkShimLoader.loadFlinkClient(client)
 
     clientWrapper.triggerSavepoint(jobID, savepointPath).get(clientTimeout.toMillis, TimeUnit.MILLISECONDS)
   }
