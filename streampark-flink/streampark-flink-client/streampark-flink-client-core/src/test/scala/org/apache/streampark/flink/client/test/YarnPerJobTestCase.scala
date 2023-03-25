@@ -19,10 +19,8 @@ package org.apache.streampark.flink.client.test
 import java.io.File
 import java.lang.reflect.Method
 import java.util
-
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
-
 import org.apache.commons.cli.Options
 import org.apache.flink.client.cli.{CliFrontendParser, CustomCommandLine}
 import org.apache.flink.client.cli.CliFrontend.loadCustomCommandLines
@@ -38,10 +36,9 @@ import org.apache.flink.yarn.configuration.YarnDeploymentTarget
 import org.apache.flink.yarn.entrypoint.YarnJobClusterEntrypoint
 import org.apache.hadoop.fs.{Path => HadoopPath}
 import org.apache.hadoop.yarn.api.records.ApplicationId
-
 import org.apache.streampark.common.util.Logger
-import org.apache.streampark.flink.core.conf.FlinkRunOption
 import org.apache.streampark.flink.client.bean
+import org.apache.streampark.flink.core.conf.FlinkRunOption
 
 /**
  * perJob to submit jobs programmatically,

@@ -1353,11 +1353,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
     this.baseMapper.persistMetrics(appParam);
   }
 
-  /**
-   * Setup task is starting (for webUI "state" display)
-   *
-   * @param appParam
-   */
+  /** Setup task is starting (for webUI "state" display) */
   @Override
   public void starting(Application application) {
     application.setState(FlinkAppState.STARTING.getValue());

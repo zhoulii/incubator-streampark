@@ -21,7 +21,7 @@ import org.apache.streampark.console.base.domain.RestRequest;
 import org.apache.streampark.console.core.entity.Application;
 import org.apache.streampark.console.core.entity.FlinkSql;
 import org.apache.streampark.console.core.enums.CandidateType;
-import org.apache.streampark.flink.core.FlinkSqlValidationResult;
+import org.apache.streampark.flink.shims.base.FlinkSqlValidationResult;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;

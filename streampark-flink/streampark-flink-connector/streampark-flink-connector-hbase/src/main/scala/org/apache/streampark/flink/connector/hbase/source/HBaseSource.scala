@@ -18,13 +18,10 @@
 package org.apache.streampark.flink.connector.hbase.source
 
 import java.util.Properties
-
 import scala.annotation.meta.param
-
 import org.apache.flink.api.common.typeinfo.TypeInformation
-import org.apache.flink.streaming.api.scala.DataStream
+import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.hadoop.hbase.client._
-
 import org.apache.streampark.common.util.Utils
 import org.apache.streampark.flink.connector.hbase.bean.HBaseQuery
 import org.apache.streampark.flink.connector.hbase.internal.HBaseSourceFunction

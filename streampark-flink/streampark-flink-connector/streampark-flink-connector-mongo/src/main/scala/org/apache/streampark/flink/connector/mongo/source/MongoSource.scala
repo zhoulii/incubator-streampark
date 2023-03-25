@@ -18,14 +18,11 @@
 package org.apache.streampark.flink.connector.mongo.source
 
 import java.util.Properties
-
 import scala.annotation.meta.param
-
 import com.mongodb.client.{FindIterable, MongoCollection, MongoCursor}
 import org.apache.flink.api.common.typeinfo.TypeInformation
-import org.apache.flink.streaming.api.scala.DataStream
+import org.apache.flink.streaming.api.datastream.DataStream
 import org.bson.Document
-
 import org.apache.streampark.common.util.Utils
 import org.apache.streampark.flink.connector.mongo.internal.MongoSourceFunction
 import org.apache.streampark.flink.core.scala.StreamingContext

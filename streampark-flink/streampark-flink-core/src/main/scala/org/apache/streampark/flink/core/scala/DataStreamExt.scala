@@ -18,15 +18,14 @@
 package org.apache.streampark.flink.core.scala
 
 import java.time.Duration
-
 import org.apache.flink.api.common.eventtime.{SerializableTimestampAssigner, WatermarkStrategy}
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.streaming.api.functions.{AssignerWithPeriodicWatermarks, AssignerWithPunctuatedWatermarks, ProcessFunction => ProcFunc}
-import org.apache.flink.streaming.api.scala.{DataStream => DStream, _}
+import org.apache.flink.streaming.api.datastream.{DataStream => DStream}
 import org.apache.flink.streaming.api.watermark.Watermark
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.streaming.runtime.operators.util.{AssignerWithPeriodicWatermarksAdapter, AssignerWithPunctuatedWatermarksAdapter}
-import org.apache.flink.util.Collector
+import org.apache.flink.util.{Collector, OutputTag}
 
 object DataStreamExt {
 
@@ -43,7 +42,6 @@ object DataStreamExt {
       }
     })
 
-    def sideGet[R: TypeInformation](sideTag: String): DStream[R] = dataStream.getSideOutput(new OutputTag[R](sideTag))
 
     def boundedOutOfOrdernessWatermark(func: T => Long, duration: Duration): DStream[T] = {
       dataStream.assignTimestampsAndWatermarks(

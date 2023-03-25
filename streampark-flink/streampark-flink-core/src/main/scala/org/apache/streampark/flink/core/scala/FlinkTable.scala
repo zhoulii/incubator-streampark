@@ -17,15 +17,16 @@
 
 package org.apache.streampark.flink.core.scala
 
-import scala.language.implicitConversions
-
 import org.apache.flink.api.common.JobExecutionResult
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.table.api.TableConfig
-
 import org.apache.streampark.common.conf.ConfigConst._
 import org.apache.streampark.common.util.{Logger, SystemPropertyUtils}
-import org.apache.streampark.flink.core.{FlinkTableInitializer, TableContext}
+import org.apache.streampark.flink.shims.FlinkShimLoader
+import org.apache.streampark.flink.shims.base.FlinkTableInitializer
+import org.apache.streampark.flink.shims.context.FlinkTableContext
+
+import scala.language.implicitConversions
 
 trait FlinkTable extends Logger {
 
@@ -33,7 +34,7 @@ trait FlinkTable extends Logger {
 
   implicit final lazy val parameter: ParameterTool = context.parameter
 
-  implicit var context: TableContext = _
+  implicit var context: FlinkTableContext = _
 
   def main(args: Array[String]): Unit = {
     init(args)
@@ -45,7 +46,8 @@ trait FlinkTable extends Logger {
 
   private[this] def init(args: Array[String]): Unit = {
     SystemPropertyUtils.setAppHome(KEY_APP_HOME, classOf[FlinkTable])
-    context = new TableContext(FlinkTableInitializer.initialize(args, config))
+    val tuple = FlinkTableInitializer.initialize(args, config)
+    context = FlinkShimLoader.loadTableContext(tuple._1, tuple._2)
   }
 
   def ready(): Unit = {}

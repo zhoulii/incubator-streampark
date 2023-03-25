@@ -32,8 +32,8 @@ import org.apache.streampark.console.core.service.ApplicationBackUpService;
 import org.apache.streampark.console.core.service.EffectiveService;
 import org.apache.streampark.console.core.service.FlinkEnvService;
 import org.apache.streampark.console.core.service.FlinkSqlService;
-import org.apache.streampark.flink.core.FlinkSqlValidationResult;
 import org.apache.streampark.flink.proxy.FlinkShimsProxy;
+import org.apache.streampark.flink.shims.base.FlinkSqlValidationResult;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -62,7 +62,7 @@ public class FlinkSqlServiceImpl extends ServiceImpl<FlinkSqlMapper, FlinkSql>
   @Autowired private FlinkEnvService flinkEnvService;
 
   private static final String FLINKSQL_VALIDATOR_CLASS =
-      "org.apache.streampark.flink.core.FlinkSqlValidator";
+      "org.apache.streampark.flink.shims.base.FlinkSqlValidator";
 
   @Override
   public FlinkSql getEffective(Long appId, boolean decode) {

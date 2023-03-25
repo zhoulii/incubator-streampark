@@ -19,14 +19,12 @@ package org.apache.streampark.flink.cli
 
 import scala.language.implicitConversions
 import scala.util.Try
-
 import org.apache.flink.api.java.utils.ParameterTool
 import org.apache.flink.configuration.ExecutionOptions
-
 import org.apache.streampark.common.conf.ConfigConst.{KEY_APP_CONF, KEY_FLINK_SQL, KEY_FLINK_TABLE_MODE}
 import org.apache.streampark.common.util.{DeflaterUtils, PropertiesUtils}
-import org.apache.streampark.flink.core.{SqlCommand, SqlCommandParser}
 import org.apache.streampark.flink.core.scala.{FlinkStreamTable, FlinkTable}
+import org.apache.streampark.flink.shims.base.{SqlCommand, SqlCommandParser}
 
 object SqlClient extends App {
 

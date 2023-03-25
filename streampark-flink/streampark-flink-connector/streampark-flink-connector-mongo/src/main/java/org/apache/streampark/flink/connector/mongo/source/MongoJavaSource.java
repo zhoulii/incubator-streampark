@@ -49,6 +49,6 @@ public class MongoJavaSource<T> {
     MongoSourceFunction<T> sourceFunction =
         new MongoSourceFunction<>(
             collectionName, property, queryFunction, resultFunction, runningFunc, null);
-    return context.getJavaEnv().addSource(sourceFunction);
+    return context.addSource(sourceFunction);
   }
 }

@@ -43,8 +43,8 @@ import org.apache.streampark.common.conf.ConfigConst._
 import org.apache.streampark.common.conf.Workspace
 import org.apache.streampark.common.enums.{ApplicationType, DevelopmentMode, ExecutionMode}
 import org.apache.streampark.common.util.{DeflaterUtils, Logger}
-import org.apache.streampark.flink.core.conf.FlinkRunOption
 import org.apache.streampark.flink.client.bean._
+import org.apache.streampark.flink.core.conf.FlinkRunOption
 import org.apache.streampark.flink.shims.FlinkShimLoader
 
 import scala.annotation.tailrec

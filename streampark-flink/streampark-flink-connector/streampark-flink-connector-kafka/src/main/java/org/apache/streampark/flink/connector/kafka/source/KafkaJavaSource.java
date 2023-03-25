@@ -86,6 +86,6 @@ public class KafkaJavaSource<T> {
             this.deserializer,
             this.strategy,
             null);
-    return context.getJavaEnv().addSource(consumer);
+    return context.addSource(consumer);
   }
 }

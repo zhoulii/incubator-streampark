@@ -17,21 +17,21 @@
 
 package org.apache.streampark.flink.core.scala
 
-import scala.language.implicitConversions
-
 import org.apache.flink.api.common.JobExecutionResult
 import org.apache.flink.api.common.typeinfo.TypeInformation
 import org.apache.flink.api.java.utils.ParameterTool
+import org.apache.flink.streaming.api.datastream.DataStream
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.streaming.api.functions.ProcessFunction
-import org.apache.flink.streaming.api.scala._
-
 import org.apache.streampark.common.conf.ConfigConst._
 import org.apache.streampark.common.util.{Logger, SystemPropertyUtils}
-import org.apache.streampark.flink.core.{FlinkStreamingInitializer, StreamEnvConfig}
-import org.apache.streampark.flink.core.EnhancerImplicit._
+import org.apache.streampark.flink.shims.base.EnhancerImplicit.EnhanceParameterTool
+import org.apache.streampark.flink.shims.base.{FlinkStreamingInitializer, StreamEnvConfig}
+
+import scala.language.implicitConversions
 
 class StreamingContext(val parameter: ParameterTool, private val environment: StreamExecutionEnvironment)
-    extends StreamExecutionEnvironment(environment.getJavaEnv) {
+    extends StreamExecutionEnvironment {
 
   /**
    * for scala
@@ -82,7 +82,8 @@ trait FlinkStreaming extends Serializable with Logger {
 
   private[this] def init(args: Array[String]): Unit = {
     SystemPropertyUtils.setAppHome(KEY_APP_HOME, classOf[FlinkStreaming])
-    context = new StreamingContext(FlinkStreamingInitializer.initialize(args, config))
+    val tuple = FlinkStreamingInitializer.initialize(args, config)
+    context = new StreamingContext(tuple._1, tuple._2)
   }
 
   def ready(): Unit = {}

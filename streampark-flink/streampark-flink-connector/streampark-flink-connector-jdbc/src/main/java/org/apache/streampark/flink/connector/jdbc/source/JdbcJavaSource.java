@@ -60,6 +60,6 @@ public class JdbcJavaSource<T> {
         this.jdbc == null ? ConfigUtils.getJdbcConf(context.parameter().toMap(), alias) : this.jdbc;
     JdbcSourceFunction<T> sourceFunction =
         new JdbcSourceFunction<>(jdbc, queryFunction, resultFunction, runningFunc, null);
-    return context.getJavaEnv().addSource(sourceFunction);
+    return context.addSource(sourceFunction);
   }
 }

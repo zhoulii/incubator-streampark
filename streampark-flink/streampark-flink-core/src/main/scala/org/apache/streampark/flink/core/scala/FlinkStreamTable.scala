@@ -17,23 +17,24 @@
 
 package org.apache.streampark.flink.core.scala
 
-import scala.language.implicitConversions
-
 import org.apache.flink.api.common.JobExecutionResult
 import org.apache.flink.api.java.utils.ParameterTool
-import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment
 import org.apache.flink.table.api.{Table, TableConfig}
-
 import org.apache.streampark.common.conf.ConfigConst._
 import org.apache.streampark.common.util.{Logger, SystemPropertyUtils}
-import org.apache.streampark.flink.core.{FlinkTableInitializer, StreamTableContext}
-import org.apache.streampark.flink.core.TableExt
+import org.apache.streampark.flink.shims.FlinkShimLoader
+import org.apache.streampark.flink.shims.base.{EnhanceedTable, FlinkTableInitializer}
+import org.apache.streampark.flink.shims.context.StreamTableContext
+import org.apache.streampark.flink.shims.ext.EnhancedTableConversions
+
+import scala.language.implicitConversions
 
 trait FlinkStreamTable extends Logger {
 
-  implicit final def tableExt(table: Table): TableExt.Table = new TableExt.Table(table)
+  implicit final def tableExt(table: Table): EnhanceedTable = new EnhanceedTable(table)
 
-  implicit final def tableConversions(table: Table): TableExt.TableConversions = new TableExt.TableConversions(table)
+  implicit final def tableConversions(table: Table): EnhancedTableConversions = FlinkShimLoader.loadTableConversions(table)
 
   implicit final lazy val parameter: ParameterTool = context.parameter
 
@@ -51,7 +52,8 @@ trait FlinkStreamTable extends Logger {
 
   private[this] def init(args: Array[String]): Unit = {
     SystemPropertyUtils.setAppHome(KEY_APP_HOME, classOf[FlinkStreamTable])
-    context = new StreamTableContext(FlinkTableInitializer.initialize(args, configStream, configTable))
+    val value = FlinkTableInitializer.initialize(args, configStream, configTable)
+    context = FlinkShimLoader.loadStreamTableContext(value._1, value._2, value._3)
   }
 
   def configStream(env: StreamExecutionEnvironment, parameter: ParameterTool): Unit = {}

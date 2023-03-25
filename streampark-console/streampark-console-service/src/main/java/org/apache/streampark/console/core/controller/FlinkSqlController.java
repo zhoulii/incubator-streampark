@@ -25,7 +25,7 @@ import org.apache.streampark.console.core.entity.FlinkSql;
 import org.apache.streampark.console.core.service.FlinkSqlService;
 import org.apache.streampark.console.core.service.SqlCompleteService;
 import org.apache.streampark.console.core.service.VariableService;
-import org.apache.streampark.flink.core.FlinkSqlValidationResult;
+import org.apache.streampark.flink.shims.base.FlinkSqlValidationResult;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 

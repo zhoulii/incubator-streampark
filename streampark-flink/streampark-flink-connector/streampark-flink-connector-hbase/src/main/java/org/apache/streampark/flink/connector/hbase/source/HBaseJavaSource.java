@@ -46,6 +46,6 @@ public class HBaseJavaSource<T> {
     Utils.notNull(resultFunction, "resultFunction must not be null");
     HBaseSourceFunction<T> sourceFunction =
         new HBaseSourceFunction<>(property, queryFunction, resultFunction, runningFunc, null);
-    return context.getJavaEnv().addSource(sourceFunction);
+    return context.addSource(sourceFunction);
   }
 }

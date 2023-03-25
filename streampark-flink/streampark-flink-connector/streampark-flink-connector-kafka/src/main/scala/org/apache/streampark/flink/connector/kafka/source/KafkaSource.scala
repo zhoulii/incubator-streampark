@@ -20,19 +20,16 @@ package org.apache.streampark.flink.connector.kafka.source
 import java.io
 import java.util.Properties
 import java.util.regex.Pattern
-
 import scala.annotation.meta.param
 import scala.collection.JavaConversions._
 import scala.util.{Failure, Success, Try}
-
 import org.apache.flink.api.common.eventtime.WatermarkStrategy
 import org.apache.flink.api.common.typeinfo.{BasicTypeInfo, TypeInformation}
 import org.apache.flink.api.java.typeutils.TypeExtractor.getForClass
-import org.apache.flink.streaming.api.scala.{DataStream, _}
+import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer, KafkaDeserializationSchema}
 import org.apache.flink.streaming.connectors.kafka.internals.KafkaTopicPartition
 import org.apache.kafka.clients.consumer.{ConsumerConfig, ConsumerRecord}
-
 import org.apache.streampark.common.conf.ConfigConst._
 import org.apache.streampark.common.util.{ConfigUtils, Utils}
 import org.apache.streampark.flink.connector.kafka.bean.KafkaRecord

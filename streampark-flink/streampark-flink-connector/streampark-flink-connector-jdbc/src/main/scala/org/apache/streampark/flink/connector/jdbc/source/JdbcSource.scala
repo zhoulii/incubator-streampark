@@ -18,13 +18,10 @@
 package org.apache.streampark.flink.connector.jdbc.source
 
 import java.util.Properties
-
 import scala.annotation.meta.param
 import scala.collection.Map
-
 import org.apache.flink.api.common.typeinfo.TypeInformation
-import org.apache.flink.streaming.api.scala.DataStream
-
+import org.apache.flink.streaming.api.datastream.DataStream
 import org.apache.streampark.common.util.Utils
 import org.apache.streampark.flink.connector.jdbc.internal.JdbcSourceFunction
 import org.apache.streampark.flink.core.scala.StreamingContext
