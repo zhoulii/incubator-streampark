@@ -147,6 +147,7 @@ private[flink] class FlinkStreamingInitializer(args: Array[String], apiType: Api
 
   def initEnvironment(): Unit = {
     localStreamEnv = StreamExecutionEnvironment.getExecutionEnvironment(configuration.envConfig)
+    if (javaStreamEnvConfFunc != null) javaStreamEnvConfFunc.configuration(localStreamEnv, configuration.parameter)
     localStreamEnv.getConfig.setGlobalJobParameters(configuration.parameter)
   }
 

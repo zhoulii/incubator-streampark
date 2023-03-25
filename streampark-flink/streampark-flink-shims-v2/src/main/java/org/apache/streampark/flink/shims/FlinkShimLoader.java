@@ -8,9 +8,6 @@ import org.apache.streampark.flink.shims.clusterclient.FlinkClusterClientV115;
 import org.apache.streampark.flink.shims.clusterclient.FlinkClusterClientV116;
 import org.apache.streampark.flink.shims.context.FlinkTableContext;
 import org.apache.streampark.flink.shims.context.StreamTableContext;
-import org.apache.streampark.flink.shims.ext.EnhancedTableConversions;
-import org.apache.streampark.flink.shims.ext.TableConversionsV112;
-import org.apache.streampark.flink.shims.ext.TableConversionsV115;
 import org.apache.streampark.flink.shims.kubeclient.FlinkKubeClient;
 import org.apache.streampark.flink.shims.kubeclient.FlinkKubeClientV112;
 import org.apache.streampark.flink.shims.kubeclient.FlinkKubeClientV113;
@@ -22,7 +19,6 @@ import org.apache.flink.FlinkVersion;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
@@ -185,23 +181,6 @@ public class FlinkShimLoader {
                     StreamTableEnvironment.class)
                 .newInstance(pt, env, tEnv);
         return (StreamTableContext) o;
-      default:
-        throw new RuntimeException(
-            "Unsupported Flink version " + FlinkVersion.current().toString());
-    }
-  }
-
-  public static EnhancedTableConversions loadTableConversions(Table table) throws Exception {
-    Class<?> tableContext = null;
-    Object o = null;
-    switch (FlinkVersion.current().toString()) {
-      case FLINK_VERSION_V1_12:
-      case FLINK_VERSION_V1_13:
-      case FLINK_VERSION_V1_14:
-        return new TableConversionsV112(table);
-      case FLINK_VERSION_V1_15:
-      case FLINK_VERSION_V1_16:
-        return new TableConversionsV115(table);
       default:
         throw new RuntimeException(
             "Unsupported Flink version " + FlinkVersion.current().toString());

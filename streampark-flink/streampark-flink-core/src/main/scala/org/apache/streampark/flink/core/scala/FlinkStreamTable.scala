@@ -26,15 +26,12 @@ import org.apache.streampark.common.util.{Logger, SystemPropertyUtils}
 import org.apache.streampark.flink.shims.FlinkShimLoader
 import org.apache.streampark.flink.shims.base.{EnhanceedTable, FlinkTableInitializer}
 import org.apache.streampark.flink.shims.context.StreamTableContext
-import org.apache.streampark.flink.shims.ext.EnhancedTableConversions
 
 import scala.language.implicitConversions
 
 trait FlinkStreamTable extends Logger {
 
   implicit final def tableExt(table: Table): EnhanceedTable = new EnhanceedTable(table)
-
-  implicit final def tableConversions(table: Table): EnhancedTableConversions = FlinkShimLoader.loadTableConversions(table)
 
   implicit final lazy val parameter: ParameterTool = context.parameter
 
