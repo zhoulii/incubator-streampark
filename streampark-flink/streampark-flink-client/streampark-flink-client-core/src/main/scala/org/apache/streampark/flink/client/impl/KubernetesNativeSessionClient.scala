@@ -18,11 +18,9 @@
 package org.apache.streampark.flink.client.impl
 
 import java.io.File
-
 import scala.collection.JavaConversions._
 import scala.language.postfixOps
 import scala.util.{Failure, Success, Try}
-
 import io.fabric8.kubernetes.api.model.{Config => _}
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.client.program.{ClusterClient, PackagedProgram}
@@ -31,16 +29,15 @@ import org.apache.flink.kubernetes.KubernetesClusterDescriptor
 import org.apache.flink.kubernetes.configuration.{KubernetesConfigOptions, KubernetesDeploymentTarget}
 import org.apache.flink.kubernetes.configuration.KubernetesConfigOptions.ServiceExposedType
 import org.apache.flink.kubernetes.kubeclient.{FlinkKubeClient, FlinkKubeClientFactory}
-
 import org.apache.streampark.common.enums.ExecutionMode
 import org.apache.streampark.common.util.{Logger, Utils}
-import org.apache.streampark.flink.core.FlinkKubernetesClient
 import org.apache.streampark.flink.kubernetes.KubernetesRetriever
 import org.apache.streampark.flink.kubernetes.enums.FlinkK8sExecuteMode
 import org.apache.streampark.flink.kubernetes.model.ClusterKey
 import org.apache.streampark.flink.client.`trait`.KubernetesNativeClientTrait
 import org.apache.streampark.flink.client.bean._
 import org.apache.streampark.flink.client.tool.FlinkSessionSubmitHelper
+import org.apache.streampark.flink.shims.FlinkShimLoader
 
 /**
  * kubernetes native session mode submit
@@ -153,7 +150,7 @@ object KubernetesNativeSessionClient extends KubernetesNativeClientTrait with Lo
       val kubernetesClusterDescriptor = getK8sClusterDescriptorAndSpecification(flinkConfig)
       clusterDescriptor = kubernetesClusterDescriptor._1
       kubeClient = FlinkKubeClientFactory.getInstance.fromConfiguration(flinkConfig, "client")
-      val kubeClientWrapper = new FlinkKubernetesClient(kubeClient)
+      val kubeClientWrapper = FlinkShimLoader.loadFlinkKubeClient(kubeClient)
 
       if (deployRequest.clusterId != null && kubeClientWrapper.getService(deployRequest.clusterId).isPresent) {
         client = clusterDescriptor.retrieve(deployRequest.clusterId).getClusterClient
@@ -195,7 +192,7 @@ object KubernetesNativeSessionClient extends KubernetesNativeClientTrait with Lo
         .safeSet(KubernetesConfigOptions.CONTAINER_IMAGE, shutDownRequest.kubernetesDeployParam.flinkImage)
         .safeSet(KubernetesConfigOptions.KUBE_CONFIG_FILE, getDefaultKubernetesConf(shutDownRequest.kubernetesDeployParam.kubeConf))
       kubeClient = FlinkKubeClientFactory.getInstance.fromConfiguration(flinkConfig, "client")
-      val kubeClientWrapper = new FlinkKubernetesClient(kubeClient)
+      val kubeClientWrapper = FlinkShimLoader.loadFlinkKubeClient(kubeClient)
 
       if (shutDownRequest.clusterId != null && kubeClientWrapper.getService(shutDownRequest.clusterId).isPresent) {
         kubeClient.stopAndCleanupCluster(shutDownRequest.clusterId)
