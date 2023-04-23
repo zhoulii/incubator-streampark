@@ -17,6 +17,7 @@
 package org.apache.streampark.common.util
 
 import org.apache.commons.lang3.StringUtils
+import org.apache.streampark.common.flink.compatible
 import org.junit.jupiter.api.{Assertions, Test}
 
 import scala.collection.mutable.ArrayBuffer
@@ -29,7 +30,7 @@ class PropertiesUtilsTestCase {
       "--c d\r\n" +
       "--x yyy"
     val programArgs = new ArrayBuffer[String]()
-    if (StringUtils.isNotEmpty(argsStr)) {
+    if (compatible.StringUtils.isNotEmpty(argsStr)) {
       val multiLineChar = "\"\"\""
       val array = argsStr.split("\\s+")
       if (array.filter(_.startsWith(multiLineChar)).isEmpty) {

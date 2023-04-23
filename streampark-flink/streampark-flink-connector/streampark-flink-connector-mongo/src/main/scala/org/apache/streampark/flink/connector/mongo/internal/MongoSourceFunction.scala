@@ -22,7 +22,7 @@ import org.apache.streampark.common.enums.ApiType.ApiType
 import org.apache.streampark.common.util.{Logger, MongoConfig}
 import org.apache.streampark.flink.connector.function.RunningFunction
 import org.apache.streampark.flink.connector.mongo.function.{MongoQueryFunction, MongoResultFunction}
-import org.apache.streampark.flink.util.FlinkUtils
+import org.apache.streampark.flink.util.FlinkRuntimeUtils
 
 import com.mongodb.MongoClient
 import com.mongodb.client.{FindIterable, MongoCollection, MongoCursor}
@@ -163,7 +163,7 @@ class MongoSourceFunction[R: TypeInformation](
   override def initializeState(context: FunctionInitializationContext): Unit = {
     // restore from checkpoint
     logInfo("MongoSource snapshotState initialize")
-    state = FlinkUtils.getUnionListState[R](context, OFFSETS_STATE_NAME)
+    state = FlinkRuntimeUtils.getUnionListState[R](context, OFFSETS_STATE_NAME)
     Try(state.get.head) match {
       case Success(q) => last = q
       case _ =>

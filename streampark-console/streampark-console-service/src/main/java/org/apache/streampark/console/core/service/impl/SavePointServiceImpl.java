@@ -17,6 +17,7 @@
 
 package org.apache.streampark.console.core.service.impl;
 
+import org.apache.streampark.common.conf.FlinkConfigConst;
 import org.apache.streampark.common.enums.ExecutionMode;
 import org.apache.streampark.common.util.CompletableFutureUtils;
 import org.apache.streampark.common.util.PropertiesUtils;
@@ -48,11 +49,9 @@ import org.apache.streampark.console.core.task.FlinkRESTAPIWatcher;
 import org.apache.streampark.flink.client.FlinkClient;
 import org.apache.streampark.flink.client.bean.SavepointResponse;
 import org.apache.streampark.flink.client.bean.TriggerSavepointRequest;
-import org.apache.streampark.flink.util.FlinkUtils;
+import org.apache.streampark.flink.util.FlinkRuntimeUtils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.configuration.CheckpointingOptions;
-import org.apache.flink.configuration.RestOptions;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -128,7 +127,7 @@ public class SavePointServiceImpl extends ServiceImpl<SavePointMapper, SavePoint
     Utils.notNull(flinkEnv);
     Utils.notNull(application);
 
-    String numRetainedKey = CheckpointingOptions.MAX_RETAINED_CHECKPOINTS.key();
+    String numRetainedKey = FlinkConfigConst.MAX_RETAINED_CHECKPOINTS().key();
     String numRetainedFromDynamicProp =
         PropertiesUtils.extractDynamicPropertiesAsJava(application.getDynamicProperties())
             .get(numRetainedKey);
@@ -151,7 +150,7 @@ public class SavePointServiceImpl extends ServiceImpl<SavePointMapper, SavePoint
 
     if (cpThreshold == 0) {
       String flinkConfNumRetained = flinkEnv.convertFlinkYamlAsMap().get(numRetainedKey);
-      int numRetainedDefaultValue = CheckpointingOptions.MAX_RETAINED_CHECKPOINTS.defaultValue();
+      int numRetainedDefaultValue = FlinkConfigConst.MAX_RETAINED_CHECKPOINTS().defaultValue();
       if (flinkConfNumRetained != null) {
         try {
           int value = Integer.parseInt(flinkConfNumRetained.trim());
@@ -230,7 +229,7 @@ public class SavePointServiceImpl extends ServiceImpl<SavePointMapper, SavePoint
     // 1) properties have the highest priority, read the properties are set: -Dstate.savepoints.dir
     String savepointPath =
         PropertiesUtils.extractDynamicPropertiesAsJava(application.getDynamicProperties())
-            .get(CheckpointingOptions.SAVEPOINT_DIRECTORY.key());
+            .get(FlinkConfigConst.SAVEPOINT_DIRECTORY().key());
 
     // Application conf configuration has the second priority. If it is a streampark|flinksql type
     // task,
@@ -242,8 +241,8 @@ public class SavePointServiceImpl extends ServiceImpl<SavePointMapper, SavePoint
         ApplicationConfig applicationConfig = configService.getEffective(application.getId());
         if (applicationConfig != null) {
           Map<String, String> map = applicationConfig.readConfig();
-          if (FlinkUtils.isCheckpointEnabled(map)) {
-            savepointPath = map.get(CheckpointingOptions.SAVEPOINT_DIRECTORY.key());
+          if (FlinkRuntimeUtils.isCheckpointEnabled(map)) {
+            savepointPath = map.get(FlinkConfigConst.SAVEPOINT_DIRECTORY().key());
           }
         }
       }
@@ -263,14 +262,14 @@ public class SavePointServiceImpl extends ServiceImpl<SavePointMapper, SavePoint
                 application.getFlinkClusterId()));
         Map<String, String> config = cluster.getFlinkConfig();
         if (!config.isEmpty()) {
-          savepointPath = config.get(CheckpointingOptions.SAVEPOINT_DIRECTORY.key());
+          savepointPath = config.get(FlinkConfigConst.SAVEPOINT_DIRECTORY().key());
         }
       } else {
         // 3.2) At the yarn or k8s mode, then read the savepoint in flink-conf.yml in the bound
         // flink
         FlinkEnv flinkEnv = flinkEnvService.getById(application.getVersionId());
         savepointPath =
-            flinkEnv.convertFlinkYamlAsMap().get(CheckpointingOptions.SAVEPOINT_DIRECTORY.key());
+            flinkEnv.convertFlinkYamlAsMap().get(FlinkConfigConst.SAVEPOINT_DIRECTORY().key());
       }
     }
 
@@ -381,8 +380,8 @@ public class SavePointServiceImpl extends ServiceImpl<SavePointMapper, SavePoint
               "The clusterId=%s cannot be find, maybe the clusterId is wrong or the cluster has been deleted. Please contact the Admin.",
               application.getFlinkClusterId()));
       URI activeAddress = cluster.getRemoteURI();
-      properties.put(RestOptions.ADDRESS.key(), activeAddress.getHost());
-      properties.put(RestOptions.PORT.key(), activeAddress.getPort());
+      properties.put(FlinkConfigConst.ADDRESS().key(), activeAddress.getHost());
+      properties.put(FlinkConfigConst.PORT().key(), activeAddress.getPort());
     }
     return properties;
   }

@@ -23,7 +23,7 @@ import org.apache.streampark.common.util.Logger
 import org.apache.streampark.flink.connector.function.RunningFunction
 import org.apache.streampark.flink.connector.hbase.bean.HBaseQuery
 import org.apache.streampark.flink.connector.hbase.function.{HBaseQueryFunction, HBaseResultFunction}
-import org.apache.streampark.flink.util.FlinkUtils
+import org.apache.streampark.flink.util.FlinkRuntimeUtils
 
 import org.apache.flink.api.common.state.ListState
 import org.apache.flink.api.common.typeinfo.TypeInformation
@@ -168,7 +168,7 @@ class HBaseSourceFunction[R: TypeInformation](apiType: ApiType = ApiType.scala, 
   override def initializeState(context: FunctionInitializationContext): Unit = {
     // Recover from checkpoint...
     logInfo("HBaseSource snapshotState initialize")
-    state = FlinkUtils.getUnionListState[R](context, OFFSETS_STATE_NAME)
+    state = FlinkRuntimeUtils.getUnionListState[R](context, OFFSETS_STATE_NAME)
     Try(state.get.head) match {
       case Success(q) => last = q
       case _ =>

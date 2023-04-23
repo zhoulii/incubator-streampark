@@ -19,7 +19,7 @@ package org.apache.streampark.flink.client.bean
 
 import org.apache.streampark.common.conf.{FlinkVersion, Workspace}
 import org.apache.streampark.common.enums.{ExecutionMode, FlinkK8sRestExposedType}
-import org.apache.streampark.flink.util.FlinkUtils
+import org.apache.streampark.flink.util.FlinkRuntimeUtils
 
 import org.apache.commons.io.FileUtils
 import org.apache.flink.kubernetes.configuration.KubernetesConfigOptions
@@ -56,7 +56,7 @@ case class DeployRequest(
       flinkHome,
       flinkLib = s"$flinkHdfsHome/lib",
       flinkPlugins = s"$flinkHdfsHome/plugins",
-      flinkDistJar = FlinkUtils.getFlinkDistJar(flinkHome),
+      flinkDistJar = FlinkRuntimeUtils.getFlinkDistJar(flinkHome),
       appJars = workspace.APP_JARS,
       appPlugins = workspace.APP_PLUGINS
     )

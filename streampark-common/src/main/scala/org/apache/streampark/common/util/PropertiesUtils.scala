@@ -18,15 +18,14 @@ package org.apache.streampark.common.util
 
 import com.typesafe.config.ConfigFactory
 import org.apache.commons.lang3.StringUtils
+import org.apache.streampark.common.flink.compatible
 import org.yaml.snakeyaml.Yaml
 
 import javax.annotation.Nonnull
-
 import java.io._
-import java.util.{HashMap => JavaMap, LinkedHashMap => JavaLinkedMap, Properties, Scanner}
+import java.util.{Properties, Scanner, HashMap => JavaMap, LinkedHashMap => JavaLinkedMap}
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.regex.Pattern
-
 import scala.collection.JavaConversions._
 import scala.collection.JavaConverters._
 import scala.collection.mutable
@@ -278,7 +277,7 @@ object PropertiesUtils extends Logger {
 
   /** extract flink configuration from application.properties */
   @Nonnull def extractDynamicProperties(properties: String): Map[String, String] = {
-    if (StringUtils.isEmpty(properties)) Map.empty[String, String]
+    if (compatible.StringUtils.isEmpty(properties)) Map.empty[String, String]
     else {
       val map = mutable.Map[String, String]()
       val simple = properties.replaceAll(MULTI_PROPERTY_REGEXP, "")

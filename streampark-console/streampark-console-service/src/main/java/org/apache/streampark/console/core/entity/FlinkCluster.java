@@ -18,6 +18,7 @@
 package org.apache.streampark.console.core.entity;
 
 import org.apache.streampark.common.conf.ConfigConst;
+import org.apache.streampark.common.conf.FlinkConfigConst;
 import org.apache.streampark.common.enums.ClusterState;
 import org.apache.streampark.common.enums.ExecutionMode;
 import org.apache.streampark.common.enums.FlinkK8sRestExposedType;
@@ -31,7 +32,6 @@ import org.apache.streampark.console.core.metrics.flink.Overview;
 import org.apache.streampark.console.core.utils.YarnQueueLabelExpression;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.configuration.CoreOptions;
 import org.apache.http.client.config.RequestConfig;
 
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -205,7 +205,7 @@ public class FlinkCluster implements Serializable {
     map.putAll(dynamicProperties);
     ResolveOrder resolveOrder = ResolveOrder.of(this.getResolveOrder());
     if (resolveOrder != null) {
-      map.put(CoreOptions.CLASSLOADER_RESOLVE_ORDER.key(), resolveOrder.getName());
+      map.put(FlinkConfigConst.CLASSLOADER_RESOLVE_ORDER().key(), resolveOrder.getName());
     }
     return map;
   }

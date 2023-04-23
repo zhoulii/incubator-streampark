@@ -18,20 +18,17 @@
 package org.apache.streampark.console.core.service.impl;
 
 import org.apache.streampark.common.conf.ConfigConst;
+import org.apache.streampark.common.conf.FlinkConfigConst;
 import org.apache.streampark.common.conf.Workspace;
 import org.apache.streampark.common.enums.DevelopmentMode;
 import org.apache.streampark.common.enums.ExecutionMode;
 import org.apache.streampark.common.enums.ResolveOrder;
 import org.apache.streampark.common.enums.StorageType;
+import org.apache.streampark.common.flink.compatible.FlinkJobID;
+import org.apache.streampark.common.flink.compatible.MemorySize;
 import org.apache.streampark.common.fs.HdfsOperator;
 import org.apache.streampark.common.fs.LfsOperator;
-import org.apache.streampark.common.util.CompletableFutureUtils;
-import org.apache.streampark.common.util.DeflaterUtils;
-import org.apache.streampark.common.util.HadoopUtils;
-import org.apache.streampark.common.util.PropertiesUtils;
-import org.apache.streampark.common.util.ThreadUtils;
-import org.apache.streampark.common.util.Utils;
-import org.apache.streampark.common.util.YarnUtils;
+import org.apache.streampark.common.util.*;
 import org.apache.streampark.console.base.domain.RestRequest;
 import org.apache.streampark.console.base.exception.ApiAlertException;
 import org.apache.streampark.console.base.exception.ApiDetailException;
@@ -96,12 +93,6 @@ import org.apache.streampark.flink.packer.pipeline.ShadedBuildResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.flink.api.common.JobID;
-import org.apache.flink.configuration.CoreOptions;
-import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.configuration.MemorySize;
-import org.apache.flink.configuration.RestOptions;
-import org.apache.flink.runtime.jobgraph.SavepointConfigOptions;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -1258,8 +1249,8 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
                   + "the cluster has been deleted. Please contact the Admin.",
               application.getFlinkClusterId()));
       URI activeAddress = cluster.getRemoteURI();
-      properties.put(RestOptions.ADDRESS.key(), activeAddress.getHost());
-      properties.put(RestOptions.PORT.key(), activeAddress.getPort());
+      properties.put(FlinkConfigConst.ADDRESS().key(), activeAddress.getHost());
+      properties.put(FlinkConfigConst.PORT().key(), activeAddress.getPort());
     }
 
     CancelRequest cancelRequest =
@@ -1417,7 +1408,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
 
     String appConf;
     String flinkUserJar = null;
-    String jobId = new JobID().toHexString();
+    String jobId = new FlinkJobID().toHexString();
     ApplicationLog applicationLog = new ApplicationLog();
     applicationLog.setOptionName(Operation.START.getValue());
     applicationLog.setAppId(application.getId());
@@ -1648,8 +1639,8 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
                   + "the cluster has been deleted. Please contact the Admin.",
               application.getFlinkClusterId()));
       URI activeAddress = cluster.getRemoteURI();
-      properties.put(RestOptions.ADDRESS.key(), activeAddress.getHost());
-      properties.put(RestOptions.PORT.key(), activeAddress.getPort());
+      properties.put(FlinkConfigConst.ADDRESS().key(), activeAddress.getHost());
+      properties.put(FlinkConfigConst.PORT().key(), activeAddress.getPort());
     } else if (ExecutionMode.isYarnMode(application.getExecutionModeEnum())) {
       if (ExecutionMode.YARN_SESSION.equals(application.getExecutionModeEnum())) {
         FlinkCluster cluster = flinkClusterService.getById(application.getFlinkClusterId());
@@ -1677,14 +1668,14 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
     if (ExecutionMode.isKubernetesApplicationMode(application.getExecutionMode())) {
       try {
         HadoopUtils.yarnClient();
-        properties.put(JobManagerOptions.ARCHIVE_DIR.key(), Workspace.ARCHIVES_FILE_PATH());
+        properties.put(FlinkConfigConst.ARCHIVE_DIR().key(), Workspace.ARCHIVES_FILE_PATH());
       } catch (Exception e) {
         // skip
       }
     }
 
     if (application.getAllowNonRestored()) {
-      properties.put(SavepointConfigOptions.SAVEPOINT_IGNORE_UNCLAIMED_STATE.key(), true);
+      properties.put(FlinkConfigConst.SAVEPOINT_IGNORE_UNCLAIMED_STATE().key(), true);
     }
 
     Map<String, String> dynamicProperties =
@@ -1692,7 +1683,7 @@ public class ApplicationServiceImpl extends ServiceImpl<ApplicationMapper, Appli
     properties.putAll(dynamicProperties);
     ResolveOrder resolveOrder = ResolveOrder.of(application.getResolveOrder());
     if (resolveOrder != null) {
-      properties.put(CoreOptions.CLASSLOADER_RESOLVE_ORDER.key(), resolveOrder.getName());
+      properties.put(FlinkConfigConst.CLASSLOADER_RESOLVE_ORDER().key(), resolveOrder.getName());
     }
 
     return properties;

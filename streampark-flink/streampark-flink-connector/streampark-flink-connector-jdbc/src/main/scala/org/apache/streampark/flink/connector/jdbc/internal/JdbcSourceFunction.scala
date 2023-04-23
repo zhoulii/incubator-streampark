@@ -21,7 +21,7 @@ import org.apache.streampark.common.enums.ApiType
 import org.apache.streampark.common.enums.ApiType.ApiType
 import org.apache.streampark.common.util.{JdbcUtils, Logger}
 import org.apache.streampark.flink.connector.function.{RunningFunction, SQLQueryFunction, SQLResultFunction}
-import org.apache.streampark.flink.util.FlinkUtils
+import org.apache.streampark.flink.util.FlinkRuntimeUtils
 
 import org.apache.flink.api.common.state.ListState
 import org.apache.flink.api.common.typeinfo.TypeInformation
@@ -136,7 +136,7 @@ class JdbcSourceFunction[R: TypeInformation](apiType: ApiType = ApiType.scala, j
 
   override def initializeState(context: FunctionInitializationContext): Unit = {
     logInfo("JdbcSource snapshotState initialize")
-    state = FlinkUtils.getUnionListState[R](context, OFFSETS_STATE_NAME)
+    state = FlinkRuntimeUtils.getUnionListState[R](context, OFFSETS_STATE_NAME)
     Try(state.get.head) match {
       case Success(q) => last = q
       case _ =>

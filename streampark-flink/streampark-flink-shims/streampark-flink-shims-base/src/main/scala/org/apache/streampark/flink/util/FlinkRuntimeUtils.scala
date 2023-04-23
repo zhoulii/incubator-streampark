@@ -27,7 +27,7 @@ import java.io.File
 import java.time.Duration
 import java.util
 
-object FlinkUtils {
+object FlinkRuntimeUtils {
 
   def getUnionListState[R: TypeInformation](
       context: FunctionInitializationContext,

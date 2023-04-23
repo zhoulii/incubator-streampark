@@ -17,6 +17,7 @@
 
 package org.apache.streampark.console.core.service.alert.impl;
 
+import org.apache.streampark.common.flink.compatible.Tuple2;
 import org.apache.streampark.common.util.Utils;
 import org.apache.streampark.console.base.exception.AlertException;
 import org.apache.streampark.console.base.util.SpringContextUtils;
@@ -31,7 +32,6 @@ import org.apache.streampark.console.core.service.alert.AlertConfigService;
 import org.apache.streampark.console.core.service.alert.AlertNotifyService;
 import org.apache.streampark.console.core.service.alert.AlertService;
 
-import org.apache.flink.api.java.tuple.Tuple2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
