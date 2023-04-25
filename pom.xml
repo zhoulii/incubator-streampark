@@ -30,50 +30,7 @@
     <packaging>pom</packaging>
     <name>StreamPark Project Parent POM</name>
 
-    <url>https://streampark.apache.org/</url>
-
-    <description>
-        StreamPark, Make stream processing easier! easy-to-use streaming application development framework and operation platform
-    </description>
-
-    <organization>
-        <name>Apache Software Foundation</name>
-        <url>https://www.apache.org</url>
-    </organization>
-
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-
-    <scm>
-        <connection>scm:git:git://github.com/apache/incubator-streampark.git</connection>
-        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/incubator-streampark.git</developerConnection>
-        <url>scm:git:git@github.com:apache/incubator-streampark.git</url>
-        <tag>HEAD</tag>
-    </scm>
-
-    <issueManagement>
-        <system>GitHub</system>
-        <url>https://github.com/apache/incubator-streampark/issues</url>
-    </issueManagement>
-
-    <mailingLists>
-        <mailingList>
-            <name>StreamPark Developer List</name>
-            <post>dev@streampark.apache.org</post>
-            <subscribe>dev-subscribe@streampark.apache.org</subscribe>
-            <unsubscribe>dev-unsubscribe@streampark.apache.org</unsubscribe>
-        </mailingList>
-        <mailingList>
-            <name>StreamPark Commits List</name>
-            <post>commits@streampark.apache.org</post>
-            <subscribe>commits-subscribe@streampark.apache.org</subscribe>
-            <unsubscribe>commits-unsubscribe@streampark.apache.org</unsubscribe>
-        </mailingList>
-    </mailingLists>
+    <description>StreamPark, Make stream processing easier! easy-to-use streaming application development framework and operation platform</description>
 
     <modules>
         <module>streampark-common</module>
@@ -498,21 +455,16 @@
                             <sourceDirectory>${project.build.sourceDirectory}</sourceDirectory>
                             <sourceDirectory>${project.build.testSourceDirectory}</sourceDirectory>
                         </sourceDirectories>
-                        <resourceIncludes>
-                            **/*.properties,
+                        <resourceIncludes>**/*.properties,
                             **/*.sh,
                             **/*.bat,
                             **/*.yml,
                             **/*.yaml,
                             **/*.xml,
-                            **/*.dict
-                        </resourceIncludes>
-                        <resourceExcludes>
-                            **/.asf.yaml,
-                            **/.github/**
-                        </resourceExcludes>
-                        <excludes>
-                        </excludes>
+                            **/*.dict</resourceIncludes>
+                        <resourceExcludes>**/.asf.yaml,
+                            **/.github/**</resourceExcludes>
+                        <excludes />
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -524,10 +476,10 @@
                     <executions>
                         <execution>
                             <id>validate</id>
-                            <phase>process-sources</phase>
                             <goals>
                                 <goal>check</goal>
                             </goals>
+                            <phase>process-sources</phase>
                         </execution>
                     </executions>
                 </plugin>
@@ -597,10 +549,10 @@
                     <executions>
                         <execution>
                             <id>spotless-check</id>
-                            <phase>validate</phase>
                             <goals>
                                 <goal>check</goal>
                             </goals>
+                            <phase>validate</phase>
                         </execution>
                     </executions>
                 </plugin>
@@ -769,6 +721,47 @@
         </plugins>
 
     </build>
+
+    <url>https://streampark.apache.org/</url>
+
+    <organization>
+        <name>Apache Software Foundation</name>
+        <url>https://www.apache.org</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <mailingLists>
+        <mailingList>
+            <name>StreamPark Developer List</name>
+            <subscribe>dev-subscribe@streampark.apache.org</subscribe>
+            <unsubscribe>dev-unsubscribe@streampark.apache.org</unsubscribe>
+            <post>dev@streampark.apache.org</post>
+        </mailingList>
+        <mailingList>
+            <name>StreamPark Commits List</name>
+            <subscribe>commits-subscribe@streampark.apache.org</subscribe>
+            <unsubscribe>commits-unsubscribe@streampark.apache.org</unsubscribe>
+            <post>commits@streampark.apache.org</post>
+        </mailingList>
+    </mailingLists>
+
+    <scm>
+        <connection>scm:git:git://github.com/apache/incubator-streampark.git</connection>
+        <developerConnection>scm:git:https://gitbox.apache.org/repos/asf/incubator-streampark.git</developerConnection>
+        <url>scm:git:git@github.com:apache/incubator-streampark.git</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/apache/incubator-streampark/issues</url>
+    </issueManagement>
 
     <profiles>
         <profile>

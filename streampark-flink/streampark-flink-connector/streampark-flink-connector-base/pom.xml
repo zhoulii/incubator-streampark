@@ -54,7 +54,6 @@
             <version>${project.version}</version>
         </dependency>
 
-
         <!-- provided -->
         <dependency>
             <groupId>org.apache.streampark</groupId>
@@ -99,6 +98,5 @@
         </dependency>
 
     </dependencies>
-
 
 </project>

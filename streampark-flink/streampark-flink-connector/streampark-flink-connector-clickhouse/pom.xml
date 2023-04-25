@@ -48,7 +48,6 @@
             <artifactId>async-http-client</artifactId>
         </dependency>
 
-
         <!-- provided -->
         <dependency>
             <groupId>org.apache.streampark</groupId>
@@ -93,6 +92,5 @@
         </dependency>
 
     </dependencies>
-
 
 </project>

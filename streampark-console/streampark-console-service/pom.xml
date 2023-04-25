@@ -350,8 +350,8 @@
             <version>${knife4j-openapi3.version}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>springdoc-openapi-webflux-core</artifactId>
                     <groupId>org.springdoc</groupId>
+                    <artifactId>springdoc-openapi-webflux-core</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
